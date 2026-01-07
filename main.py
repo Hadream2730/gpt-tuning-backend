@@ -103,12 +103,31 @@ async def fine_tune(file: UploadFile = File(...)):
                     detail="Invalid JSONL format. Each line must be a JSON object with 'messages' array containing 'role' and 'content' fields."
                 )
 
-            # Upload file to OpenAI
-            with open(tmp_file_path, 'rb') as training_file:
+            # Clean the file: remove empty lines and trailing newlines
+            # Create a cleaned version for OpenAI upload
+            cleaned_file_path = tmp_file_path + "_cleaned"
+            valid_lines = []
+            with open(tmp_file_path, 'r', encoding='utf-8') as f_in:
+                for line in f_in:
+                    stripped_line = line.strip()
+                    if stripped_line:  # Only keep non-empty lines
+                        valid_lines.append(stripped_line)
+            
+            # Write cleaned file without trailing newline
+            with open(cleaned_file_path, 'w', encoding='utf-8') as f_out:
+                if valid_lines:
+                    f_out.write('\n'.join(valid_lines))
+
+            # Upload cleaned file to OpenAI
+            with open(cleaned_file_path, 'rb') as training_file:
                 uploaded_file = client.files.create(
                     file=training_file,
                     purpose='fine-tune'
                 )
+            
+            # Clean up cleaned file
+            if os.path.exists(cleaned_file_path):
+                os.unlink(cleaned_file_path)
 
             # Start fine-tuning job
             # Note: GPT-4.1 fine-tuning may not be available yet. 
