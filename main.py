@@ -135,7 +135,7 @@ async def fine_tune(file: UploadFile = File(...)):
             # Adjust the model parameter based on OpenAI's available models.
             fine_tune_job = client.fine_tuning.jobs.create(
                 training_file=uploaded_file.id,
-                model="gpt-4o-2024-08-06",  # Use available GPT-4 model. Change to "gpt-4.1" when available
+                model="gpt-4.1-2024-04-14",  # Use available GPT-4 model. Change to "gpt-4.1" when available
                 # hyperparameters={
                 #     "n_epochs": 3,  # Optional: customize hyperparameters
                 # }
