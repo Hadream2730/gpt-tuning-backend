@@ -38,8 +38,29 @@ The API will be available at http://localhost:8000
 - `POST /api/fine-tune` - Upload JSONL file and start fine-tuning
 - `GET /api/fine-tune/{job_id}` - Get status of a fine-tuning job
 
+## Deployment on Render.com
+
+1. **Start Command:**
+   ```
+   uvicorn main:app --host 0.0.0.0 --port $PORT
+   ```
+   Or Render will automatically use the `Procfile` if present.
+
+2. **Environment Variables to set in Render:**
+   - `OPENAI_API_KEY` - Your OpenAI API key
+   - `ALLOWED_ORIGINS` - Comma-separated list of frontend URLs (e.g., `https://your-frontend.onrender.com,http://localhost:3000`)
+
+3. **Build Command:**
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. **Python Version:**
+   Set to Python 3.11 or 3.12 in Render settings.
+
 ## Notes
 
 - The model parameter is currently set to `gpt-4o-2024-08-06`. When GPT-4.1 fine-tuning becomes available, update the model parameter in `main.py`.
 - Make sure your JSONL file follows OpenAI's fine-tuning format with "messages" array containing "role" and "content" fields.
+- For production, update the `ALLOWED_ORIGINS` environment variable to include your frontend URL.
 

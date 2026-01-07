@@ -13,9 +13,11 @@ load_dotenv()
 app = FastAPI(title="GPT Fine-Tuning API", version="1.0.0")
 
 # CORS middleware to allow frontend to connect
+# Get allowed origins from environment variable or use defaults
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -172,5 +174,6 @@ async def get_fine_tune_status(job_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
