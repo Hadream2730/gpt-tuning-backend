@@ -182,20 +182,13 @@ async def get_fine_tune_status(job_id: str):
     """
     try:
         job = client.fine_tuning.jobs.retrieve(job_id)
-        return {
-            "job_id": job.id,
-            "status": job.status,
-            "model": job.model,
-            "created_at": job.created_at,
-            "finished_at": job.finished_at,
-            "trained_tokens": job.trained_tokens,
-            "error": job.error if hasattr(job, 'error') else None
-        }
+        return job
     except Exception as e:
         raise HTTPException(
             status_code=404,
             detail=f"Fine-tuning job not found: {str(e)}"
         )
+
 
 
 if __name__ == "__main__":
