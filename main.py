@@ -37,6 +37,7 @@ def validate_jsonl_file(file_path: str) -> bool:
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
             if len(lines) == 0:
+                print("line: 0")
                 return False
             
             for i, line in enumerate(lines, 1):
@@ -64,6 +65,7 @@ def validate_jsonl_file(file_path: str) -> bool:
                             print(f"Error: Line {i} message does not have 'role' or 'content' fields: {msg}")
                             return False
                 except json.JSONDecodeError:
+                    print(f"Error: Line {i} is not a valid JSON object: {line}")
                     return False
         return True
     except Exception as e:
