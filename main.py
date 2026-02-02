@@ -47,16 +47,21 @@ def validate_jsonl_file(file_path: str) -> bool:
                     data = json.loads(line)
                     # Check if it has the required structure for fine-tuning
                     if not isinstance(data, dict):
+                        print(f"Error: Line {i} is not a JSON object: {line}")
                         return False
                     if "messages" not in data:
+                        print(f"Error: Line {i} does not have 'messages' field: {line}")
                         return False
                     if not isinstance(data["messages"], list):
+                        print(f"Error: Line {i} 'messages' is not a list: {line}")
                         return False
                     # Validate message structure
                     for msg in data["messages"]:
                         if not isinstance(msg, dict):
+                            print(f"Error: Line {i} message is not a JSON object: {msg}")
                             return False
                         if "role" not in msg or "content" not in msg:
+                            print(f"Error: Line {i} message does not have 'role' or 'content' fields: {msg}")
                             return False
                 except json.JSONDecodeError:
                     return False
